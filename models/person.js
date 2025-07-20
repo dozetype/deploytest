@@ -22,8 +22,14 @@ const personSchema = new mongoose.Schema({
     },
     number: {
         type: String,
-        minLength: 3,
+        minLength: [8, "Number Too short"],
         required: true,
+        validate: {
+            validator: function (v) {
+                return match = v.match(/^\d{2,3}-\d+$/); // check first part: 2-3, second part: all digits
+            },
+            message: (props) => `${props.value} is not a valid phone number!`,
+        },
     },
     id: String,
 });
