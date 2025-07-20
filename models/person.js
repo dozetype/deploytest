@@ -1,4 +1,3 @@
-
 const mongoose = require("mongoose");
 mongoose.set("strictQuery", false);
 
@@ -16,8 +15,16 @@ mongoose
     });
 
 const personSchema = new mongoose.Schema({
-    name: String,
-    number: String,
+    name: {
+        type: String,
+        minLenght: 3,
+        required: true,
+    },
+    number: {
+        type: String,
+        minLenght: 3,
+        required: true,
+    },
     id: String,
 });
 

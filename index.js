@@ -69,21 +69,25 @@ app.delete("/api/persons/:id", (request, response, next) => {
 //     res.json(p);
 // });
 
-app.post("/api/persons", (req, res) => {
+app.post("/api/persons", (req, res, next) => {
     const { name, number } = req.body;
 
-    if (!name || !number) { //doesnt work
+    if (!name || !number) {
+        //doesnt work
         return res.status(400).json({ error: "content missing" });
     }
-    
+
     const person = new Person({
         name: name,
         number: number,
     });
 
-    person.save().then((savedP) => {
-        res.json(savedP);
-    });
+    person
+        .save()
+        .then((savedP) => {
+            res.json(savedP);
+        })
+        .catch((err) => next(err));
 });
 
 app.put("/api/persons/:id", (req, res, next) => {
@@ -110,14 +114,16 @@ const unknownEndpoint = (request, response) => {
 };
 app.use(unknownEndpoint);
 
-const errorHandler = (error, request, response, next) => {
-    console.error(error.message);
+const errorHandler = (err, req, res, next) => {
+    console.error(err.message);
 
-    if (error.name === "CastError") {
-        return response.status(400).send({ error: "malformatted id" });
+    if (err.name === "CastError") {
+        return res.status(400).send({ error: "malformatted id" });
+    } else if (err.name === "ValidationError") {
+        return res.status(400).json({ error: err.message });
     }
 
-    next(error);
+    next(err);
 };
 app.use(errorHandler);
 
