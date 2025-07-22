@@ -34,7 +34,7 @@ const personSchema = new mongoose.Schema({
     id: String,
 });
 
-personSchema.set("toJSON", {
+personSchema.set("toJSON", { // for converting the document into json format
     transform: (document, returnedObj) => {
         returnedObj.id = returnedObj._id.toString();
         delete returnedObj._id;

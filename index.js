@@ -12,7 +12,7 @@ const app = express();
 // };
 app.use(express.static("dist")); //Allow Express to run frontend code, allowing backend to serve full stack
 app.use(express.json());
-app.use(morgan("tiny"));
+app.use(morgan("tiny")); //using tiny morgan for the console to check if different requests
 
 app.get("/", (request, response) => {
     response.send("<h1>Hello World!</h1>");
